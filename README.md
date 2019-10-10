@@ -14,6 +14,7 @@ The package presents three typical ways of resolving Knapsack problem, with brut
 a list with best value and selected elements 
 
 Pass status of Travis building:
+https://travis-ci.org/yewei369/FancyPackRLiU6.svg?branch=master
 
 
 name<-"Jun Li"
