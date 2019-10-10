@@ -1,0 +1,70 @@
+---
+title: "FancyPackRLiU6"
+author: Jun Li
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{FancyPackRLiU6}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Description
+The package presents three typical ways of resolving Knapsack problem, with brutal force, dynamic programing and approximate solutions. By means of exploring different computing complexities, a better understanding of fast code has been reached.
+
+## Fields
+*x*, a data frame of items with different values and weights
+
+*W*, the capacity of knapsack
+
+## Return
+a list with best value and selected elements 
+
+
+## Questions
+```{r setup, echo=TRUE}
+library(FancyPackRLiU6)
+set.seed(42)
+n<- 2000
+knapsack_objects <-data.frame(
+    w=sample(1:4000, size = n, replace = TRUE),
+    v=runif(n = n, 0, 10000))
+
+## Question How much time does it takes to run the algorithm for n = 16 objects?
+start<-proc.time()
+brute_force_knapsack(x = knapsack_objects[1:16,], W = 3500) 
+end<-proc.time()
+(end-start)[2]   ## 0.06
+## Question How much time does it takes to run the algorithm for n = 500 objects?
+start<-proc.time()
+knapsack_dynamic(x = knapsack_objects[1:500,], W = 3500)[2] 
+end<-proc.time()
+(end-start)[2]   ## 0.02
+## Question How much time does it takes to run the algorithm for n = 1000000 objects?
+set.seed(42)
+n<- 1000000
+knapsack_objects <-data.frame(
+    w=sample(1:4000, size = n, replace = TRUE),
+    v=runif(n = n, 0, 10000))
+start<-proc.time()
+system.time(greedy_knapsack(x = knapsack_objects, W = 3500))[2] 
+end<-proc.time()
+(end-start)[2]   ## 0.01
+## Question What performance gain could you get by trying to improving your code?
+    ## lineprof show that binary convertion is one of the biggest bottleneck, and a suggestion is presented in the next question
+## Question What performance gain could you get by using Rcpp and C++?
+start<-proc.time()
+brute_force_knapsack(x = knapsack_objects[1:16,], W = 3500,fast=TRUE) 
+end<-proc.time()
+(end-start)[2]   ## 0.05, Rcpp function improved performance with almost 17% faster 
+## Question What performance gain could you get by parallelizing brute force search? 
+    ##
+```
